@@ -4,15 +4,16 @@
 ## Inspiration/Acknowledgments, isn't there enough of these projects already?
 
 That's a fair question. Before I decided to write my own project, I looked for
-projects that solved my project. And while I found quite a few there, they were
-either to simple of to complex for me needs. One project that got
-almost perfectly right for my needs, is [gitlab-webhook-receiver][gitlab-webhook-receiver].
-I took inspiration on this project specially `config.yaml` file, so thank you
+projects that would solve fit my needs. And while I found quite a few out there. But they were
+either to simple or to complex for my needs. One project in particular that got
+almost right for my needs is [gitlab-webhook-receiver][gitlab-webhook-receiver].
+However I had a few issues with it when I tested it, so I decided to write my
+own. I took inspiration on this project, specially the `config.yaml` file, so thank you
 for the idea, I will be using a similar approach here.
 
-**NOTE**: I started the project a few days ago, so in the next couple of days,
-you'll still won't find anything useful in this repository. Because I need that
-for a few projects I'm working on, I'm confident that in the next couple of
+**NOTE**: I started this project a few days ago, so in the next couple of days,
+you'll still won't find anything useful in this repository. Because I need this
+for a few other projects, I'm confident that in the next couple of
 weeks, I'll have a working first version.
 
 

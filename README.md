@@ -3,7 +3,7 @@
 
 ## Inspiration/Acknowledgments, isn't there enough of these projects already?
 
-That's a fair question. Before I decided to write my own project, I look for
+That's a fair question. Before I decided to write my own project, I looked for
 projects that solved my project. And while I found quite a few there, they were
 either to simple of to complex for me needs. One project that got
 almost perfectly right for my needs, is [gitlab-webhook-receiver][gitlab-webhook-receiver].

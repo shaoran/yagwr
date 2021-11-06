@@ -4,7 +4,7 @@
 ## Inspiration/Acknowledgments, isn't there enough of these projects already?
 
 That's a fair question. Before I decided to write my own project, I looked for
-projects that would fit my needs. And while I found quite a few out there. But they were
+projects that would fit my needs. And while I found quite a few out there, they were
 either to simple or to complex for my needs. One project in particular that got
 almost right for my needs is [gitlab-webhook-receiver][gitlab-webhook-receiver].
 However I had a few issues with it when I tested it, so I decided to write my

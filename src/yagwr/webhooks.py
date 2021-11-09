@@ -55,10 +55,10 @@ class WebhookHandler(BaseHTTPRequestHandler):
         if header_length is not None:
             request["body"] = self.rfile.read(int(header_length))
 
-        if hasattr(self.server, "controller"):
+        if hasattr(self.server, "_controller"):
             try:
-                loop = self.server.controller["loop"]
-                queue = self.server.controller["queue"]
+                loop = self.server._controller["loop"]
+                queue = self.server._controller["queue"]
             except KeyError:
                 log.error(
                     "Invalid controller object, cannot put into queue", exc_info=True

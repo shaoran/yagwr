@@ -40,7 +40,7 @@ def main(argv=sys.argv[1:]):
     _level_choices = ("DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL")
 
     log_group.add_argument(
-        "--log-level", help="the log level", default="WARNING", choices=_level_choices
+        "--log-level", help="the log level", default="INFO", choices=_level_choices
     )
 
     log_group.add_argument(

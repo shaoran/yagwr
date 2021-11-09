@@ -125,3 +125,7 @@ def setup_logger(log_file, log_level, quiet, log_rotate=None, log_rotate_arg=Non
     }
 
     logging.config.dictConfig(logging_conf)
+
+    # silencing some "noisy" modules
+    logging.getLogger("parso").setLevel(logging.CRITICAL + 1)
+    logging.getLogger("asyncio").setLevel(logging.CRITICAL + 1)

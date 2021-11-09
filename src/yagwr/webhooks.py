@@ -1,3 +1,4 @@
+import asyncio
 import logging
 
 from http.server import BaseHTTPRequestHandler
@@ -75,3 +76,25 @@ class WebhookHandler(BaseHTTPRequestHandler):
 
     def log_message(self, fmt, *args):
         log.info(fmt, *args)
+
+
+async def process_gitlab_request_task(controller):
+    """
+    Main asyncio tasks that reads the requests from the queue and
+    launches the processing of the queue
+    """
+    log = NamedLogger(raw_log, {"name": "PROCESS"})
+
+    log.debug("Starting request worker")
+
+    log.info("Generating asyncio queue")
+    queue = asyncio.Queue()
+
+    controller["loop"] = asyncio.get_running_loop()
+    controller["queue"] = queue
+
+    while True:
+        request = await queue.get()
+        queue.task_done()
+
+        # TODO: process request

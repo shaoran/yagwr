@@ -2,8 +2,11 @@ import sys
 import logging
 import argparse
 
+from http.server import ThreadingHTTPServer
+
 from .. import __version__
 from ..logger import setup_logger, LoggerConfigError
+from ..webhooks import WebhookHandler
 
 log = logging.getLogger("yagwr")
 
@@ -81,3 +84,21 @@ def main(argv=sys.argv[1:]):
 
     if args.port < 1:
         parser.error(f"Invalid portb {args.port!r}, only positive values are permitted")
+
+    server_addr = (args.host, args.port)
+    log.info("Listenting on %s:%d", *server_addr)
+    http_server = ThreadingHTTPServer(server_addr, WebhookHandler)
+
+    res = 0
+    try:
+        http_server.serve_forever()
+    except KeyboardInterrupt:
+        # cosmetic reasons, don't display this exception
+        pass
+    except:
+        log.error("The HTTP server terminated with an error", exc_info=True)
+        res = 1
+    finally:
+        http_server.server_close()
+
+    return res

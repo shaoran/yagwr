@@ -78,3 +78,6 @@ def main(argv=sys.argv[1:]):
         )
     except LoggerConfigError as e:
         parser.error(f"Unable to setup the logger: {e.args[0]}")
+
+    if args.port < 1:
+        parser.error(f"Invalid portb {args.port!r}, only positive values are permitted")

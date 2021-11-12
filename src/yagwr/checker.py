@@ -12,8 +12,11 @@ The conditions can be built directly by generating :py:class:`Node` objects
 and linking them toghether according to your logic rules, or you can
 create a dictionary and parse it with :py:func:`parse_from_object`.
 
+.. _condition dictionary:
+
 The condition dictionary
 ~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 You have three basic operators: **ANY** (corresponds to boolean ``OR``),
 **ALL** (corresponds to boolean ``AND``) and **NOT** (corresponds to boolean ``NOT``).
@@ -93,15 +96,38 @@ import re
 
 
 class InvalidExpression(Exception):
+    """
+    This exception is raised when parsing the condition-dictionary fails
+    because of an incorrect type was passed.
+    """
+
     pass
 
 
 class Node:
+    """
+    The base node. All nodes must have at least one children.
+
+    Do not instantiate this class directly.
+    """
+
     def __init__(self, kind, children=[]):
+        """
+        :param str kind: A string representation of the kind of the node
+        :param list children: a list of the children of the node,
+            they must be of type :py:class:`Node`.
+        """
         self.kind = kind
         self.children = children
 
     def eval(self, ref):
+        """
+        Evaluates the condition in the node given a dictionary
+
+        :param dict ref: the dictionary to be evaluated
+        :returns bool: ``True`` if the condition matches the values
+            in the dictionary, ``False`` otherwise.
+        """
         raise NotImplemented("Evaluation not implemented")
 
     def __repr__(self):
@@ -109,6 +135,10 @@ class Node:
         return f"<{self.kind}: [{', '.join(m)}]>"
 
     def to_dict(self):
+        """
+        :return: The condition in dictionary form.
+        :rtype: dict
+        """
         if isinstance(self, LiteralNode):
             return self.children[0]
 
@@ -119,7 +149,16 @@ class Node:
 
 
 class LiteralNode(Node):
+    """
+    A *Literal Node*, that means it's a terminal node. It doesn't have children.
+    """
+
     def __init__(self, expr):
+        """
+        :param str expr: the boolean expression. The operator can be one of: ``=`` (equals),
+            ``!=`` (not equals), ``~=`` matches regular expression, ``!~=`` doesn not match regular expression.
+            The left-hand-side and the right-hand-side values are trimmed.
+        """
         if not isinstance(expr, str):
             raise InvalidExpression(f"{expr!r} must be a string")
 
@@ -154,7 +193,14 @@ class LiteralNode(Node):
 
 
 class NotNode(Node):
+    """
+    A **NOT** *Node*.
+    """
+
     def __init__(self, node):
+        """
+        :param Node node: The node to be negated
+        """
         if not isinstance(node, Node):
             raise InvalidExpression(f"{node!r} is not a valid Node")
 
@@ -165,7 +211,15 @@ class NotNode(Node):
 
 
 class AllNode(Node):
+    """
+    A **AND** *Node*.
+    """
+
     def __init__(self, nodes):
+        """
+        :param list(Node) nodes: A list of nodes that all must individually match
+            the condition.
+        """
         if not all([isinstance(node, Node) for node in nodes]):
             raise InvalidExpression("Not every node is valid Node")
 
@@ -176,7 +230,15 @@ class AllNode(Node):
 
 
 class AnyNode(Node):
+    """
+    A **OR** *Node*.
+    """
+
     def __init__(self, nodes):
+        """
+        :param list(Node) nodes: A list of nodes. Only one must match
+            the condition.
+        """
         if not all([isinstance(node, Node) for node in nodes]):
             raise InvalidExpression("Not every node is valid Node")
 
@@ -187,6 +249,15 @@ class AnyNode(Node):
 
 
 def parse_from_object(obj):
+    """
+    Parses the condition from a dictionary.
+
+    :param dict obj: The dictionary containing the condition.
+        See `condition dictionary`_ for the structure of the
+        dictionary.
+    :return: The node representing the out-most operator of the condition
+    :rtype: Node
+    """
     if isinstance(obj, str):
         return LiteralNode(obj)
 

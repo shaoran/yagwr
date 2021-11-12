@@ -40,11 +40,13 @@ class AsyncInThread:
         ath = AsyncInThread(main_task())
 
         ath.start()
-        while True:
-            execute_task()
-            if should_quit():
-                break
-        ath.stop()
+        try:
+            while True:
+                execute_task()
+                if should_quit():
+                    break
+        finally:
+            ath.stop()
     """
 
     def __init__(self, coro, name="AsyncThread", log=module_logger):

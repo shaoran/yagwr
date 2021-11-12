@@ -49,7 +49,7 @@ class AsyncInThread:
 
     def __init__(self, coro, name="AsyncThread", log=module_logger):
         """
-        :param coro: a coroutine, the main task. When :py:meth:`stop` is executed,
+        :param coroutine coro: a coroutine, the main task. When :py:meth:`stop` is executed,
             the task is cancelled. The task is responsible to cancel other tasks
             that it might have spawned.
         :param str name: a string used in logging and for the name of the

@@ -2,6 +2,7 @@ import sys
 import logging
 import argparse
 import time
+import yaml
 
 from http.server import ThreadingHTTPServer
 
@@ -9,6 +10,8 @@ from .. import __version__
 from ..logger import setup_logger, LoggerConfigError
 from ..webhooks import WebhookHandler, process_gitlab_request_task
 from ..async_in_thread import AsyncInThread
+from ..checker import InvalidExpression
+from ..rules import Rule
 
 log = logging.getLogger("yagwr")
 
@@ -71,6 +74,13 @@ def main(argv=sys.argv[1:]):
         "-v", '--version', action='version', version=f"%(prog)s {__version__}"
     )
 
+    parser.add_argument(
+        "rules",
+        metavar="<RULE FILE>",
+        help="A YAML file with the rules",
+        type=argparse.FileType("r"),
+    )
+
     args = parser.parse_args(argv)
 
     try:
@@ -87,11 +97,38 @@ def main(argv=sys.argv[1:]):
     if args.port < 1:
         parser.error(f"Invalid portb {args.port!r}, only positive values are permitted")
 
+    log.info("Reading %r", args.rules.name)
+    rules_raw = yaml.safe_load(args.rules)
+    args.rules.close()
+
+    if isinstance(rules_raw, dict):
+        rules_raw = [rules_raw]
+
+    rules = []
+
+    log.info("Parsing rules")
+    for idx, rule_raw in enumerate(rules_raw):
+        try:
+            rule = Rule.from_dict(rule_raw)
+        except InvalidExpression as e:
+            log.error("Rule number %d is invalid: %s", idx + 1, str(e))
+            continue
+        except:
+            log.error("Rule number %d could not be parsed", idx + 1, exc_info=True)
+            continue
+
+        rules.append(rule)
+
+    if not rules:
+        log.error("After parsing no rules were found")
+        return
+
     # used by the HTTP server and main asyncio task to
     # synchronize with each other
     controller = {
         "loop": None,
         "queue": None,
+        "rules": rules,
     }
 
     async_thread = AsyncInThread(process_gitlab_request_task(controller))

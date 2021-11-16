@@ -16,7 +16,13 @@ from ..rules import Rule
 log = logging.getLogger("yagwr")
 
 
-def main(argv=sys.argv[1:]):
+def create_cmdline_parse():
+    """
+    Helper function that creates the command line arguments
+
+    :return: a command line argument
+    :rtype: argparse.ArgumentParser
+    """
     parser = argparse.ArgumentParser(
         description='Yat Another Gitlab Webhooks Runner',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -80,6 +86,12 @@ def main(argv=sys.argv[1:]):
         help="A YAML file with the rules",
         type=argparse.FileType("r"),
     )
+
+    return parser
+
+
+def main(argv=sys.argv[1:]):
+    parser = create_cmdline_parse()
 
     args = parser.parse_args(argv)
 

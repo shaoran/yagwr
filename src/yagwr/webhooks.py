@@ -17,8 +17,8 @@ class WebhookHandler(BaseHTTPRequestHandler):
     """
     The request handler for Gitlab webhooks
 
-    The `Gitlab documentation <https://docs.gitlab.com/ee/user/project/integrations/webhooks.html#http-responses-for-your-endpoint>`
-    metions says::
+    The `Gitlab documentation <https://docs.gitlab.com/ee/user/project/integrations/webhooks.html#http-responses-for-your-endpoint>`_
+    states:
 
         Your endpoint should send its HTTP response as fast as possible. If the response
         takes longer than the configured timeout, GitLab assumes the hook failed and retries it.
@@ -26,7 +26,7 @@ class WebhookHandler(BaseHTTPRequestHandler):
 
     For this reason this request handler pushes the request information (headers, payload) onto a
     :py:class:`asyncio.Queue` queue and responds as fast as possible. This approach is fine because
-    the documentation also says::
+    the documentation also says:
 
         GitLab ignores the HTTP status code returned by your endpoint.
 
@@ -43,6 +43,9 @@ class WebhookHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_POST(self):
+        """
+        Handles the HTTP request from gitlab
+        """
         request = {
             "client_address": self.client_address,
             "path": self.path,
@@ -128,6 +131,9 @@ async def process_gitlab_request_task(controller):
 
 
 async def execute_action(request, action, log):
+    """
+    Helper function that executes arbitrary commands
+    """
     transform_key = lambda key: re.sub(r"[\s-]", "_", key)
 
     headers = request.get("headers") or {}

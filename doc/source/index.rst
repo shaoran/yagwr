@@ -10,7 +10,10 @@ Welcome to yagwr's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   manual
    api/index
+
+
 
 
 Indices and tables

@@ -1,0 +1,11 @@
+---
+
+- condition:
+    all:
+        - gitlab_token = da89d228826a2ac5ba9abdf438182cfc
+          gitlab_event = Push Hook
+  action: ~/local/bin/checkout_repo.sh
+
+
+- condition: path = /a64/logger
+  action: python3 ~/local/bin/log_gitlab_event.py > ~/logs/log_gitlab_event.log

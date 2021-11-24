@@ -218,3 +218,8 @@ Examples
     action: /home/project_a/doc/build_docs.py | sendmail status@mycompany.com
 
 
+Example
+-------
+
+.. literalinclude:: examples/config.yml
+   :language: yaml

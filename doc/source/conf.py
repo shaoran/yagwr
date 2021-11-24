@@ -18,8 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = 'yagwr'
-copyright = '2021, Shaoran'
-author = 'Shaoran'
+copyright = '2021, Pablo Yanez'
+author = 'Pablo Yanez'
 
 # The full version, including alpha/beta/rc tags
 release = '0.0.1'

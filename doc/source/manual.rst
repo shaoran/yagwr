@@ -111,9 +111,9 @@ Format
 
 The top level structure of the YAML file is a list with this shape:
 
-.. code-block::
+.. code-block:: yaml
 
-    ----
+    ---
 
     - condition: <COND>
       action: <ACTION>

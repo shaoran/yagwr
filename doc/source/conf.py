@@ -17,12 +17,19 @@
 
 # -- Project information -----------------------------------------------------
 
+import sys
+
 project = 'yagwr'
 copyright = '2021, Pablo Yanez'
 author = 'Pablo Yanez'
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+try:
+    import yagwr
+except ImportError:
+    print("yagwr not found, you have to install it to build the documentation", file=sys.stderr)
+
+release = yagwr.__version__
 
 
 # -- General configuration ---------------------------------------------------

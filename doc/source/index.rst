@@ -6,13 +6,14 @@
 Welcome to yagwr's documentation!
 =================================
 
+:Release: |release|
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    manual
    api/index
-
 
 
 

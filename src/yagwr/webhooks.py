@@ -159,5 +159,14 @@ async def execute_action(request, action, log):
     if stderr:
         log.debug("STDERR:\n%s", stderr)
 
-    if proc.returncode == 0:
-        log.debug("command failed, payload was\n%s\n----\n", request.get("body"))
+    if proc.returncode != 0:
+        try:
+            body = request["body"]
+            if isinstance(body, bytes):
+                body = body.decode("UTF-8", errors="ignore").strip()
+            else:
+                body = f"Unknown payload type: {body!r}"
+
+            log.debug("command failed, payload was\n%s\n----\n", body)
+        except KeyError:
+            pass

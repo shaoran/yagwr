@@ -1,7 +1,6 @@
 import asyncio
 import logging
 import re
-
 from http.server import BaseHTTPRequestHandler
 
 from .logger import NamedLogger
@@ -56,7 +55,7 @@ class WebhookHandler(BaseHTTPRequestHandler):
 
         log.debug("Parsing incoming request from %s", self.client_address[0])
 
-        header_length = self.headers['Content-Length']
+        header_length = self.headers["Content-Length"]
         if header_length is not None:
             request["body"] = self.rfile.read(int(header_length))
 

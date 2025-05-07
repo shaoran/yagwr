@@ -141,9 +141,24 @@ async def execute_action(request, action, log):
 
     log.debug("Creating subprocess")
     proc = await asyncio.create_subprocess_shell(
-        action, stdin=asyncio.subprocess.PIPE, env=env
+        action,
+        stdin=asyncio.subprocess.PIPE,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
+        env=env,
     )
 
     log.debug("Writing stdin with payload")
-    await proc.communicate(input=request.get("body"))
+    log.debug("Command: %r", action)
+    stdout, stderr = await proc.communicate(input=request.get("body"))
     log.debug("return code: %s", proc.returncode)
+    stdout = stdout.decode("UTF-8", errors="ignore").strip()
+    stderr = stderr.decode("UTF-8", errors="ignore").strip()
+
+    if stdout:
+        log.debug("STDOUT:\n%s", stdout)
+    if stderr:
+        log.debug("STDERR:\n%s", stderr)
+
+    if proc.returncode == 0:
+        log.debug("command failed, payload was\n%s\n----\n", request.get("body"))
